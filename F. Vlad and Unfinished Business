@@ -1,0 +1,109 @@
+/*
+	Author: Ankit Rastogi, IIIT Gwalior
+	"In the darkest times, hope is something you give yourself. That is the meaning of inner strength."
+*/
+ 
+#pragma GCC optimize("Ofast")
+#pragma GCC optimization("unroll-loops")
+
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std; 
+
+#define ll long long
+#define F first
+#define S second
+#define all(x) x.begin(), x.end()
+#define sortall(x) sort(all(x))
+#define reverseall(x) reverse(all(x))
+#define pb push_back
+#define mod 1000000007
+#define inf (ll)1e18
+#define yes "YES"
+#define no "NO"
+#define endl '\n'
+
+typedef pair<ll, ll>	pll;
+typedef vector<ll>		vl;
+typedef vector<pll>		vpl;
+typedef vector<vl>		vvl;
+typedef vector<string>  vs;
+
+void printvl(vl& a){for(auto i:a)cout<<i<<" ";cout<<endl;}
+// struct comparator {
+//      bool operator()(pll a,pll b) {
+//      return a.S > b.S;
+//     }
+// };
+// priority_queue <pll, vector<pll>, comparator> pq;
+// priority_queue <ll, vector<ll>, greater<ll> > pq;  //min-heap
+// vl fact(10001, 1);
+// void set_fact(){for(ll i = 1; i <= 1001; i++){fact[i] = fact[i - 1] * i;fact[i] %= mod;}}
+// ll power(ll x, ll p){if(p == 0) return 1;ll ans = power(x, p / 2);ans *= ans;ans %= mod;if(p % 2){    ans *= x;    ans %= mod;}return ans;}
+// ll nCk(ll n, ll k){ll ans = fact[n];ll inverse = power(fact[k], mod - 2);
+// ans *= inverse;ans %= mod;inverse = power(fact[n - k], mod - 2);ans *= inverse;ans %= mod;return ans;}
+bool dfs1(map<ll,vl>& m,vl& vis,ll x,ll y,set<ll>& path){
+    vis[x]=1;
+    if(x==y)return 1;
+    bool f=false;
+    for(auto i:m[x]){
+        if(vis[i]!=1){
+            f = dfs1(m,vis,i,y,path);
+            if(f){path.insert(i);return f;}
+        }
+    }
+    return f;
+}
+ll dfs2(map<ll,vl>& m,vl& vis,vl& ans,ll x,ll t,set<ll>& path,set<ll>& a){
+    vis[x]=1;
+    ll f=0;
+    for(auto i:m[x]){
+        if(vis[i]!=1){
+            f += dfs2(m,vis,ans,i,t,path,a);
+        }
+    }
+    if(f&&a.find(x)==a.end()&&path.find(x)==path.end())f++;
+    if(a.find(x)!=a.end()&&path.find(x)==path.end())f++;
+    return f;
+}
+void solve(){
+    ll n,k;
+    cin>>n>>k;
+    ll x,y;
+    cin>>x>>y;
+    set<ll> a,path;
+    path.insert(x);
+    map<ll,vl> m;
+    for(int i=0; i<k; i++){
+        ll h;
+        cin>>h;
+        a.insert(h);
+    }
+    for(int i=0; i<n-1; i++){
+        ll p,q;
+        cin>>p>>q;
+        m[p].pb(q);
+        m[q].pb(p);
+    }
+    vl vis1(n+1,0),vis2(n+1,0),ans(n+1,0);
+    dfs1(m,vis1,x,y,path);
+    ll j=dfs2(m,vis2,ans,x,0,path,a);
+    ll res=path.size()-1+2*j;
+    cout<<res<<endl;
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    ll t;
+    cin>>t;
+    while(t--)solve();
+    // int tc=1;
+    // cin >> tc;
+    // for(int t1 = 1; t1 <= tc; t1++){
+    //     cout << "Case #"<< t1 <<": ";
+    //     solve();
+    // }
+	return 0;
+}
