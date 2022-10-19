@@ -1,0 +1,100 @@
+/*
+	Author: Ankit Rastogi, IIIT Gwalior
+	"When we hit our lowest point, we are opened to the greatest change."
+*/
+ 
+#pragma GCC optimize("Ofast")
+#pragma GCC optimization("unroll-loops")
+
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std; 
+
+#define ll long long
+#define F first
+#define S second
+#define all(x) x.begin(), x.end()
+#define sortall(x) sort(all(x))
+#define reverseall(x) reverse(all(x))
+#define pb push_back
+#define mod 1000000007
+#define inf (ll)3e18
+#define yes "YES"
+#define no "NO"
+#define endl '\n'
+
+typedef pair<ll, ll>	pll;
+typedef vector<ll>		vl;
+typedef vector<pll>		vpl;
+typedef vector<vl>		vvl;
+typedef vector<string>  vs;
+
+void printvl(vl& a){for(auto i:a)cout<<i<<" ";cout<<endl;}
+// struct comparator {
+//      bool operator()(pll a,pll b) {
+//      return a.S > b.S;
+//     }
+// };
+// priority_queue <pll, vector<pll>, comparator> pq;
+// priority_queue <ll, vector<ll>, greater<ll> > pq;  //min-heap
+// vl fact(10001, 1);
+// void set_fact(){for(ll i = 1; i <= 1001; i++){fact[i] = fact[i - 1] * i;fact[i] %= mod;}}
+// ll power(ll x, ll p){if(p == 0) return 1;ll ans = power(x, p / 2);ans *= ans;ans %= mod;if(p % 2){    ans *= x;    ans %= mod;}return ans;}
+// ll nCk(ll n, ll k){ll ans = fact[n];ll inverse = power(fact[k], mod - 2);
+// ans *= inverse;ans %= mod;inverse = power(fact[n - k], mod - 2);ans *= inverse;ans %= mod;return ans;}
+ll calc(ll x,ll y,ll z){
+    if(x==inf||y==inf||z==inf)return inf;
+    return (x-y)*(x-y)+(z-y)*(z-y)+(x-z)*(x-z);
+}
+ll f(vl& r,vl& g,vl& b){
+    ll ans=inf;
+    for(int i=0; i<r.size(); i++){
+        ll x=r[i];
+        ll y1,y2,z1,z2;
+        y1=lower_bound(g.begin(),g.end(),x)-g.begin();
+        y2=lower_bound(g.begin(),g.end(),x)-g.begin()-1;y2=max(0ll,y2);
+        z1=lower_bound(b.begin(),b.end(),x)-b.begin();
+        z2=lower_bound(b.begin(),b.end(),x)-b.begin()-1;z2=max(0ll,z2);
+        if(y1==g.size())y1=inf;
+        else y1=g[y1];
+        if(y2==g.size())y2=inf;
+        else y2=g[y2];
+        if(z1==b.size())z1=inf;
+        else z1=b[z1];
+        if(z2==b.size())z2=inf;
+        else z2=b[z2];
+        // cout<<y1<<" "<<y2<<" "<<z1<<" "<<z2<<endl;
+        ans=min(ans,calc(x,y1,z1));
+        ans=min(ans,calc(x,y1,z2));
+        ans=min(ans,calc(x,y2,z1));
+    }
+    return ans;
+}
+void solve(){
+    ll nr,ng,nb;
+    cin>>nr>>ng>>nb;
+    vl r(nr),g(ng),b(nb);
+    for(int i=0; i<nr; i++)cin>>r[i];
+    for(int i=0; i<ng; i++)cin>>g[i];
+    for(int i=0; i<nb; i++)cin>>b[i];
+    sortall(r);sortall(g);sortall(b);
+    ll ans=inf;
+    ans=min({ans,f(r,g,b),f(g,r,b),f(b,g,r)});
+    cout<<ans<<endl;
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    ll t;
+    cin>>t;
+    while(t--)solve();
+    // int tc=1;
+    // cin >> tc;
+    // for(int t1 = 1; t1 <= tc; t1++){
+    //     cout << "Case #"<< t1 <<": ";
+    //     solve();
+    // }
+	return 0;
+}
