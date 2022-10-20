@@ -1,0 +1,70 @@
+https://codeforces.com/contest/1679/problem/C
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long int
+#define ff first
+#define ss second
+#define mod (ll)(1e9 + 7)
+
+void solve()
+{
+     int n, q;
+    cin >> n >> q;
+    vector<int> rows(n + 1, 0), cols(n + 1, 0);
+    set<int> empty_rows, empty_cols;
+    for(int i = 1; i <= n; i++){
+        empty_cols.insert(i);
+        empty_rows.insert(i);
+    }
+    while(q--){
+        int ch, x, y;
+        cin >> ch;
+        if(ch == 1){
+            cin >> x >> y;
+            rows[x]++;
+            cols[y]++;
+            empty_cols.erase(y);
+            empty_rows.erase(x);
+        }
+        else if(ch == 2){
+            cin >> x >> y;
+            rows[x]--;
+            cols[y]--;
+            if(rows[x] <= 0){
+                empty_rows.insert(x);
+            }
+            if(cols[y] <= 0){
+                empty_cols.insert(y);
+            }
+        }
+        else{
+            int x2, y2;
+            cin >> x >> y >> x2 >> y2;
+            auto it = empty_rows.lower_bound(x);
+            int r = it == empty_rows.end() ? INT_MAX : *it;
+            it = empty_cols.lower_bound(y);
+            int c = it == empty_cols.end() ? INT_MAX : *it;
+            if(r > x2 || c > y2){
+                cout << "Yes\n";
+            }
+            else{
+                cout << "No\n";
+            }
+        }
+    }
+    
+}
+
+int main()
+{
+
+#ifndef ONLINE_JUDGE
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+#endif
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+solve();
+
+
+}
