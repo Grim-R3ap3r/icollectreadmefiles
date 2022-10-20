@@ -1,0 +1,81 @@
+https://codeforces.com/contest/1684/problem/C
+
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long int
+#define ff first
+#define ss second
+#define mod (ll)(1e9 + 7)
+
+void solve()
+{
+   ll n,m;
+   cin>>n>>m;
+   ll i,x=1,y=1,j,f=0,k=1;
+   vector<vector<int>>a(n,vector<int>(m));
+   for(i=0;i<n;i++)
+   {
+    for(j=0;j<m;j++)
+    {
+      cin>>a[i][j];
+     
+    }
+   }
+  //int n = a.size(), m = a[0].size();
+    vector<int> b;
+    for (int i = 0; i < n && b.empty(); i++) 
+    {
+        vector<int> b1 = a[i];
+        sort(b1.begin(), b1.end());
+        for (int j = 0; j < m; j++)
+         {
+            if (a[i][j] != b1[j])
+            { 
+              b.push_back(j+1);
+            //  cout<<b.size()<<"l";
+           }
+        }
+    }
+    
+    if (b.size() == 0) {
+      //cout<<"op";
+    	cout << 1 << " " << 1 << "\n";
+    	return;
+    }
+    if (b.size() > 2) {
+    	cout << -1 << "\n";
+    	return;
+    }
+    for (int i = 0; i < n; i++) {
+        swap(a[i][b[0]-1], a[i][b[1]-1]);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+            if (a[i][j] < a[i][j - 1]) {
+            	cout << -1 << "\n";
+            	return;
+           	}
+        }
+    }
+    cout << b[0] << " " << b[1] << "\n";
+    return;
+    
+
+}
+
+int main()
+{
+
+#ifndef ONLINE_JUDGE
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+#endif
+    ios_base::sync_with_stdio(false);
+    cin.tie(0); cout.tie(0);
+    ll t;
+    cin>>t;
+    while(t--)
+      solve(); 
+
+
+}
