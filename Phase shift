@@ -1,0 +1,79 @@
+https://codeforces.com/contest/1735/problem/C
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long int
+#define ff first
+#define ss second
+#define  sz(s)        (int)s.size()
+#define  all(v)       (v).begin(),(v).end()
+#define mod (ll)(1e9 + 7)
+#define  enl          '\n'
+struct DSU {
+    vector<int>parent,sizz;
+ 
+    DSU () {}
+ 
+    DSU(int n) {
+        for(int i=0;i<=n;i++) parent.push_back(i);
+        sizz.assign(n+1,1);
+    }
+    
+    int find_set(int v) {
+        if(parent[v] == v) return v;
+        return parent[v] = find_set(parent[v]);
+    }
+ 
+    void union_set(int u,int v) {
+        u = find_set(u);
+        v = find_set(v);
+ 
+        if(v == u) return;
+ 
+        if(sizz[u] > sizz[v]) swap(u,v);
+        parent[u] = v;
+        sizz[v] += sizz[u];
+    }
+};
+ 
+void solve() {
+    int n;
+    cin>>n;
+    string s;
+    cin>>s;
+    map<int,int>mp;
+    set<int>st;
+    for(int i=0;i<26;i++) st.insert(i);
+    DSU gr(26);
+    for(auto u:s) {
+        int t = u-'a';
+        if(mp.find(t)!=mp.end()) continue;
+        if(sz(mp) == 25) {
+            mp[t] = *st.begin();
+            continue;
+        }
+        for(auto i:st) {
+            if(gr.find_set(i) != gr.find_set(t)) {
+                mp[t] = i;
+                gr.union_set(t,i);
+                break;
+            }
+        }
+        st.erase(st.find(mp[t]));
+    }
+ 
+    for(auto u:s) cout<<(char('a'+mp[u-'a']));cout<<enl;
+} 
+ 
+
+int main()
+{
+
+#ifndef ONLINE_JUDGE
+  freopen("input.txt", "r", stdin);
+  freopen("output.txt", "w", stdout);
+#endif
+ll t;
+cin>>t;
+while(t--)
+solve();
+}
