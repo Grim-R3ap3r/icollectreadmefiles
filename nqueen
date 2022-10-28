@@ -1,0 +1,115 @@
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+
+class Solution {
+public:
+    vector<vector<int>> rat;
+    bool safecheck(int row,int col,vector<string>& board,int n)
+    {
+        int duprow=row,dupcol=col;
+        while(row>=0&&col>=0)
+        {
+            if(board[row][col]=='Q')
+                return false;
+            row--;
+            col--;
+        }
+        row=duprow;
+        col=dupcol;
+                while(col>=0)
+        {
+            if(board[row][col]=='Q')
+                return false;
+                    
+            col--;
+            
+        }
+          row=duprow;
+        col=dupcol;
+                while(row<n&col>=0)
+        {
+            if(board[row][col]=='Q')
+                return false;
+                    
+                    row++;
+                    col--;
+            
+        }
+        return true;
+    }
+    void solve(int col,vector<string> &board,int n)
+    {
+        vector<int> temp;
+        if(col==n)
+        {
+            
+           for(int i=0;i<n;i++)
+           {
+               for(int j=0;j<n;j++)
+               {
+                   if(board[j][i]=='Q')
+                   {
+                       temp.push_back(j+1);
+                       break;
+                   }
+               }
+           }
+           rat.push_back(temp);
+            return;
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            if(safecheck(i,col,board,n))
+            {
+                board[i][col]='Q';
+                solve(col+1,board,n);
+                board[i][col]='.';
+            }
+        }
+    }
+    
+    vector<vector<int>> nQueen(int n) {
+       vector<string> board(n);
+        string s(n,'.');
+        for(int i=0;i<n;i++)
+            board[i]=s;
+        
+        solve(0,board,n);
+        return rat;
+        
+    }
+};
+
+//{ Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        
+        Solution ob;
+        vector<vector<int>> ans = ob.nQueen(n);
+        if(ans.size() == 0)
+            cout<<-1<<"\n";
+        else {
+            for(int i = 0;i < ans.size();i++){
+                cout<<"[";
+                for(int u: ans[i])
+                    cout<<u<<" ";
+                cout<<"] ";
+            }
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+// } Driver Code Ends
