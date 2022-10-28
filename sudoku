@@ -1,0 +1,111 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+// UNASSIGNED is used for empty cells in sudoku grid 
+#define UNASSIGNED 0  
+
+// N is used for the size of Sudoku grid.  
+// Size will be NxN  
+#define N 9  
+
+
+// } Driver Code Ends
+class Solution 
+{
+    public:
+    //Function to find a solved Sudoku. 
+    bool SolveSudoku(int grid[N][N])  
+    { 
+        // Your code here
+        solve(grid);
+    }
+    
+    //Function to print grids of the Sudoku.
+    void printGrid (int grid[N][N]) 
+    {
+        // Your code here 
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0;j<N;j++)
+            cout<<grid[i][j]<<" ";
+        }
+    }
+    
+     
+    bool solve(int grid[N][N])
+    {
+        //now for checking empty spaces in grid
+        for(int i=0;i<N;i++)
+        {
+            for(int j=0;j<N;j++)
+            {
+                if(grid[i][j]==0)
+                {
+                    //looping and seeing which number fits to the space
+                    for(int k=1;k<=9;k++)
+                    {
+                   
+                        if(safecheck(i,j,k,grid))
+                        {
+                                 grid[i][j]=k;
+                            if(solve(grid)==true) //most important line
+                            {
+                                return true;
+                            }
+                            else
+                                grid[i][j]=0;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        //filled up
+        return true;
+        
+    }
+    
+       bool safecheck(int row,int col,int k,int grid[N][N])
+    {
+        //check if the given character can be put into the empty space
+        for(int i=0;i<9;i++)
+        {
+            if(grid[row][i]==k)
+                return false;
+            if(grid[i][col]==k)
+                return false;
+            if(grid[3*(row/3)+i/3][3*(col/3)+i%3]==k)
+                return false;
+        }
+        
+        return true;
+    }
+   
+};
+
+//{ Driver Code Starts.
+
+int main() {
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		int grid[N][N];
+		
+		for(int i=0;i<9;i++)
+		    for(int j=0;j<9;j++)
+		        cin>>grid[i][j];
+		        
+		Solution ob;
+		
+		if (ob.SolveSudoku(grid) == true)  
+            ob.printGrid(grid);  
+        else
+            cout << "No solution exists";  
+        
+        cout<<endl;
+	}
+	
+	return 0;
+}
+// } Driver Code Ends
